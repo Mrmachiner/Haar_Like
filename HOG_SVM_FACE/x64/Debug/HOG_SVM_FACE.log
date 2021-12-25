@@ -1,0 +1,10 @@
+﻿  Detection.cpp
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(30): error C2143: syntax error: missing ';' before '<'
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(30): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(31): error C2143: syntax error: missing ';' before '{'
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(31): error C2447: '{': missing function header (old-style formal list?)
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(62): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(63): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(101): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(130): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+c:\users\minhhoang\source\repos\haar_like\hog_svm_face\detection.cpp(173): error C3861: 'get_svm_detector': identifier not found

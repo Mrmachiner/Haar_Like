@@ -1,0 +1,526 @@
+#include "opencv2/imgproc.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/ml.hpp"
+#include "opencv2/objdetect.hpp"
+#include <algorithm> 
+#include <iostream>
+#include<vector>
+#include <numeric>
+#include <time.h>
+
+using namespace cv;
+using namespace cv::ml;
+using namespace std;
+int RANDOM_PATCH_COUNT = 10;
+vector< float > get_svm_detector(const Ptr< SVM >& svm);
+void convert_to_ml(const std::vector< Mat > & train_samples, Mat& trainData);
+void load_images(const String & dirname, vector< Mat > & img_lst, bool showImages);
+void sample_neg(const vector< Mat > & full_neg_lst, vector< Mat > & neg_lst, const Size & size);
+void computeHOGs(const Size wsize, const vector< Mat > & img_lst, vector< Mat > & gradient_lst, bool use_flip);
+
+vector< float > get_svm_detector(const Ptr< SVM >& svm)
+{
+	// get the support vectors
+	Mat sv = svm->getSupportVectors();
+	const int sv_total = sv.rows;
+	// get the decision function
+	Mat alpha, svidx;
+	double rho = svm->getDecisionFunction(0, alpha, svidx);
+
+	CV_Assert(alpha.total() == 1 && svidx.total() == 1 && sv_total == 1);
+	CV_Assert((alpha.type() == CV_64F && alpha.at<double>(0) == 1.) ||
+		(alpha.type() == CV_32F && alpha.at<float>(0) == 1.f));
+	CV_Assert(sv.type() == CV_32F);
+
+	vector< float > hog_detector(sv.cols + 1);
+	memcpy(&hog_detector[0], sv.ptr(), sv.cols * sizeof(hog_detector[0]));
+	hog_detector[sv.cols] = (float)-rho;
+	return hog_detector;
+}
+
+/*
+* Convert training/testing set to be used by OpenCV Machine Learning algorithms.
+* TrainData is a matrix of size (#samples x max(#cols,#rows) per samples), in 32FC1.
+* Transposition of samples are made if needed.
+*/
+void convert_to_ml(const vector< Mat > & train_samples, Mat& trainData)
+{
+	//--Convert data
+	const int rows = (int)train_samples.size();
+	const int cols = (int)std::max(train_samples[0].cols, train_samples[0].rows);
+	Mat tmp(1, cols, CV_32FC1); //< used for transposition if needed
+	trainData = Mat(rows, cols, CV_32FC1);
+
+	for (size_t i = 0; i < train_samples.size(); ++i)
+	{
+		CV_Assert(train_samples[i].cols == 1 || train_samples[i].rows == 1);
+
+		if (train_samples[i].cols == 1)
+		{
+			transpose(train_samples[i], tmp);
+			tmp.copyTo(trainData.row((int)i));
+		}
+		else if (train_samples[i].rows == 1)
+		{
+			train_samples[i].copyTo(trainData.row((int)i));
+		}
+	}
+}
+
+void load_images(const String & dirname, vector< Mat > & img_lst, bool showImages = false)
+{
+	vector< String > files;
+	glob(dirname, files);
+	random_shuffle(files.begin(), files.end());
+	for (size_t i = 1; i < files.size(); ++i)
+	{
+		Mat img = imread(files[i]); // load the image
+		if (img.empty())            // invalid image, skip it.
+		{
+			cout << files[i] << " is invalid!" << endl;
+			continue;
+		}
+
+		if (showImages)
+		{
+			imshow("image", img);
+			waitKey(1);
+		}
+		//resize(img, img, Size(40, 56));
+		img_lst.push_back(img);
+	}
+}
+void sample_neg(const vector< Mat > & full_neg_lst, vector< Mat > & neg_lst, const Size & size)
+{
+	Rect box;
+	box.width = size.width;
+	box.height = size.height;
+
+	const int size_x = box.width;
+	const int size_y = box.height;
+
+	srand((unsigned int)time(NULL));
+
+	for (size_t i = 0; i < full_neg_lst.size(); i++)
+		if (full_neg_lst[i].cols > box.width && full_neg_lst[i].rows > box.height)
+		{
+			box.x = rand() % (full_neg_lst[i].cols - size_x);
+			box.y = rand() % (full_neg_lst[i].rows - size_y);
+			Mat roi = full_neg_lst[i](box);
+			neg_lst.push_back(roi.clone());
+		}
+}
+
+void computeHOGs(const Size wsize, const vector< Mat > & img_lst, vector< Mat > & gradient_lst, bool use_flip)
+{
+	HOGDescriptor hog(wsize, Size(24, 24), Size(8, 8), Size(8, 8), 9);
+	//HOGDescriptor hog;
+	//HOGDescriptor hog(
+	//	Size(64, 128), //winSize
+	//	Size(10, 10), //blocksize
+	//	Size(5, 5), //blockStride,
+	//	Size(10, 10), //cellSize,
+	//	9, //nbins,
+	//	1, //derivAper,
+	//	-1, //winSigma,
+	//	HOGDescriptor::L2Hys, //histogramNormType,
+	//	0.2, //L2HysThresh,
+	//	1,//gammal correction,
+	//	64,//nlevels=64
+	//	1);//Use signed gradients 
+	//hog.winSize = wsize;
+	/*hog.compute(inputImg, Descriptors, WinStrideSize, PaddingSize, VecPointLocations);*/
+	vector< float > descriptors;
+	//vector< Point> locations;
+	Mat gray;
+	for (size_t i = 1; i < img_lst.size(); i++)
+	{
+		cvtColor(img_lst[i], gray, COLOR_BGR2GRAY);
+		hog.compute(gray, descriptors,Size(8,8),Size(0,0));
+		gradient_lst.push_back(Mat(descriptors).clone());
+		/*if (img_lst[i].cols >= wsize.width && img_lst[i].rows >= wsize.height)
+		{
+			Rect r = Rect((img_lst[i].cols - wsize.width) / 2,
+				(img_lst[i].rows - wsize.height) / 2,
+				wsize.width,
+				wsize.height);
+			cvtColor(img_lst[i](r), gray, COLOR_BGR2GRAY);
+			hog.compute(gray, descriptors, Size(8, 8), Size(0, 0));
+			gradient_lst.push_back(Mat(descriptors).clone());
+		}*/
+	}
+}
+float Calu_predic_test(vector<Mat> Vec_mat, Ptr< SVM > svm,int choise)
+{
+	vector<float> lst_predic;
+	if (choise==0)
+	{
+		for (int i = 0; i < Vec_mat.size(); i++)
+		{
+			float Prec_end = svm->predict(Vec_mat[i]);
+			cout << endl << "Predic_Faces" + to_string(i) <<"\t"<< Prec_end * 1.0;
+			lst_predic.push_back(Prec_end);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < Vec_mat.size(); i++)
+		{
+			float Prec_end = svm->predict(Vec_mat[i]);
+			cout << endl << "Predic_Non-Faces" + to_string(i)<<"\t" << Prec_end * 1.0;
+			lst_predic.push_back(Prec_end);
+		}
+	}
+	float sum = 0;
+	for (int i = 0; i < lst_predic.size(); i++) {
+		sum += lst_predic[i];
+	}
+	return sum / lst_predic.size()*1.0;
+}
+float Calu_predic(vector<Mat> Vec_mat, Ptr< SVM > svm)
+{
+	vector<float> lst_predic;
+	for (int i = 0; i < Vec_mat.size(); i++) 
+	{
+		float Prec_end = svm->predict(Vec_mat[i]);
+		lst_predic.push_back(Prec_end);
+	}
+            	float sum = 0;
+	for (int i = 0; i < lst_predic.size(); i++) {
+		sum += lst_predic[i];
+	}
+	return sum / lst_predic.size()*1.0;
+}
+vector<Mat> Vec_mat_predic(vector<Mat> vec_Mat) {
+	vector<Mat> Mat_predic;
+	for (int i = 0; i < vec_Mat.size(); i++) 
+	{
+		vector<Mat> lst_gra_test;
+		Mat test_pre;
+		lst_gra_test.push_back(vec_Mat[i]);
+		convert_to_ml(lst_gra_test, test_pre);
+		Mat_predic.push_back(test_pre);
+	}
+	return Mat_predic;
+}
+vector<vector<float>> PredictSVM(string path) {
+	vector<Mat> lst_img;
+	vector<vector<float>> lst_pre;
+	load_images(path, lst_img, false);
+	Ptr<SVM> svm = SVM::create();
+	svm = SVM::load("C:\\Users\\MinhHoang\\source\\repos\\Haar_Like\\Test\\my_detector_4h57SVM.xml");
+	vector<float> lst_preTrue;
+	vector<float> lst_preFalse;
+	//for (int i = 0; i < lst_img.size(); i++) {
+	//	Mat gray;
+	//	resize(lst_img[i], lst_img[i], Size((int)lst_img[i].size().width / 5, (int)lst_img[i].size().height / 5));
+	//	cvtColor(lst_img[i], gray, COLOR_BGR2GRAY);
+	//	Mat sample = Mat_<float>(1, 1215) << lst_img[i];
+	//	//sample.convertTo(gray, CV_32FC1);
+	//	float pre = svm->predict(sample);
+	//	if (pre == 1) {
+	//		lst_preTrue.push_back(pre);
+	//	}
+	//	else
+	//	{
+	//		lst_preFalse.push_back(pre);
+	//	}
+	//}
+	lst_pre.push_back(lst_preTrue);
+	lst_pre.push_back(lst_preFalse);
+	return lst_pre;
+}
+void computeNagativeHOGs(const Size wsize, const vector< Mat > & img_lst, vector< Mat > & gradient_lst, bool use_flip)
+{
+	HOGDescriptor hog;
+	//HOGDescriptor hog(
+	//	Size(64, 128), //winSize
+	//	Size(10, 10), //blocksize
+	//	Size(5, 5), //blockStride,
+	//	Size(10, 10), //cellSize,
+	//	9, //nbins,
+	//	1, //derivAper,
+	//	-1, //winSigma,
+	//	HOGDescriptor::L2Hys, //histogramNormType,
+	//	0.2, //L2HysThresh,
+	//	1,//gammal correction,
+	//	64,//nlevels=64
+	//	1);//Use signed gradients 
+	hog.winSize = wsize;
+	Mat gray;
+	//Mat rsize;
+	vector< float > descriptors;
+
+	for (size_t i = 1; i < img_lst.size(); i++)
+	{
+		//resize(img_lst[i], rsize, Size(32, 32));
+		if (img_lst[i].cols >= wsize.width && img_lst[i].rows >= wsize.height)
+		{
+			Rect r = Rect((img_lst[i].cols - wsize.width) / 2,
+				(img_lst[i].rows - wsize.height) / 2,
+				wsize.width,
+				wsize.height);
+			cvtColor(img_lst[i](r), gray, COLOR_BGR2GRAY);
+			hog.compute(gray, descriptors, Size(8, 8), Size(0, 0));
+			gradient_lst.push_back(Mat(descriptors).clone());
+			if (use_flip)
+			{
+				flip(gray, gray, 1);
+				hog.compute(gray, descriptors, Size(8, 8), Size(0, 0));
+				gradient_lst.push_back(Mat(descriptors).clone());
+			}
+		}
+	}
+}
+int main(int argc, char** argv)
+{
+	////const char* keys =
+	////{
+	////	"{help h|     | show help message}"
+	////	"{pd    |     | path of directory contains positive images}"
+	////	"{nd    |     | path of directory contains negative images}"
+	////	"{td    |     | path of directory contains test images}"
+	////	"{tv    |     | test video file name}"
+	////	"{dw    |     | width of the detector}"
+	////	"{dh    |     | height of the detector}"
+	////	"{f     |false| indicates if the program will generate and use mirrored samples or not}"
+	////	"{d     |false| train twice}"
+	////	"{t     |false| test a trained detector}"
+	////	"{v     |false| visualize training steps}"
+	////	"{fn    |my_detector.yml| file name of trained SVM}"
+	////};
+
+	String pos_dir = "D:\\Data\\positive\\positive";
+	String neg_dir = "D:\\Data\\negative\\negative";
+	//String test_dir = parser.get< String >("td");
+	String obj_det_filename ="my_detector_4h57.xml";
+	//String videofilename = parser.get< String >("tv");
+	int detector_width=40;
+	int detector_height=56;
+	bool test_detector = true;
+	bool train_twice = false;
+	bool visualization = false;
+	bool flip_samples = false;
+
+
+	vector< Mat > pos_lst, full_neg_lst, neg_lst, gradient_lst;
+	vector< int > labels;
+	vector<Mat> pre_posi, pre_nega,full_lst_posi, full_lst_nega;
+	clog << "Positive images are being loaded...";
+	load_images(pos_dir, full_lst_posi, visualization);
+	int SL_train_posi = full_lst_posi.size()*0.8;
+	int SL_pre_posi = full_lst_posi.size() - SL_train_posi;
+	random_shuffle(full_lst_posi.begin(),full_lst_posi.end());
+	//SL image train
+	for (int i = 0; i < SL_train_posi; i++) 
+	{
+		pos_lst.push_back(full_lst_posi[i]);
+	}
+	//SL image pre
+	for (int i = SL_train_posi; i < full_lst_posi.size(); i++) 
+	{
+		pre_posi.push_back(full_lst_posi[i]);
+	}
+	if (pos_lst.size() > 0)
+	{
+		clog << "...[done]" << endl;
+	}
+	else
+	{
+		clog << "no image in " << pos_dir << endl;
+		return 1;
+	}
+
+	Size pos_image_size = pos_lst[0].size();
+
+	if (detector_width && detector_height)
+	{
+		pos_image_size = Size(detector_width, detector_height);
+	}
+	else
+	{
+		for (size_t i = 1; i < pos_lst.size(); ++i)
+		{
+			if (pos_lst[i].size() != pos_image_size)
+			{
+				cout << "All positive images should be same size!" << endl;
+				exit(1);
+			}
+		}
+		pos_image_size = pos_image_size / 8 * 8;
+	}
+
+	clog << "Negative images are being loaded...";
+	load_images(neg_dir, full_lst_nega, visualization);
+	int SL_train_nega= full_lst_nega.size()*0.8;
+	int SL_pre_nega = full_lst_nega.size() - SL_train_nega;
+	//SL image train nega
+	for (int i = 0; i < SL_train_nega; i++) {
+		neg_lst.push_back(full_lst_nega[i]);
+	}
+	//SL image pre nega
+	for (int i = SL_train_nega; i < full_lst_nega.size(); i++) {
+		pre_nega.push_back(full_lst_nega[i]);
+	}
+	//sample_neg(full_neg_lst, neg_lst, pos_image_size);
+	clog << "...[done]" << endl;
+	vector<Mat> dt_train_predic_posi_test;
+	clog << "Histogram of Gradients are being calculated for positive images...";
+	computeHOGs(pos_image_size, pos_lst, gradient_lst, flip_samples);
+	computeHOGs(pos_image_size, pos_lst, dt_train_predic_posi_test, flip_samples);
+	size_t positive_count = gradient_lst.size();
+	labels.assign(positive_count, +1);
+	clog << "...[done] ( positive count : " << positive_count << " )" << endl;
+	vector<Mat> gradien_lst_pre_posi;
+	cout << "Histogram of Gradients are being calculated for Pre_positive images...";
+	computeHOGs(pos_image_size, pre_posi, gradien_lst_pre_posi, flip_samples);
+	clog << "...[done] ( positive count : " << pre_posi.size() << " )" << endl;
+
+	vector<Mat> dt_train_predic_nega_test;
+	clog << "Histogram of Gradients are being calculated for negative images...";
+	computeHOGs(pos_image_size, neg_lst, gradient_lst, flip_samples);
+	computeHOGs(pos_image_size, neg_lst, dt_train_predic_nega_test, flip_samples);
+	size_t negative_count = gradient_lst.size() - positive_count;
+	labels.insert(labels.end(), negative_count, -1);
+	CV_Assert(positive_count < labels.size());
+	clog << "...[done] ( negative count : " << negative_count << " )" << endl;
+	vector<Mat> gradien_lst_pre_enga;
+	cout << "Histogram of Gradients are being calculated for Pre_negative images...";
+	computeHOGs(pos_image_size, pre_nega, gradien_lst_pre_enga, flip_samples);
+	cout << "...[done] ( positive count : " << pre_nega.size() << " )" << endl;
+	/// test predict
+	//Mat sample = imread("D:\\Data\\positive\\positive\\imp100.jpg");
+	//Mat sample1 = imread("D:\\Data\\positive\\positive\\imp12845.jpg");
+	//Mat sample2 = imread("D:\\Data\\positive\\positive\\imp12683.jpg");
+	//Mat sample3 = imread("D:\\Data\\positive\\positive\\imp462.jpg");
+	//Mat sample4 = imread("D:\\Data\\positive\\positive\\imp12679.jpg");
+	//Mat sample5 = imread("D:\\Data\\positive\\positive\\imp12579.jpg");
+	//vector<Mat> lst_sample,lst_gra_test;
+	//lst_sample.push_back(sample);
+	//lst_sample.push_back(sample1);
+	//lst_sample.push_back(sample2);
+	//lst_sample.push_back(sample3);
+	//lst_sample.push_back(sample4);
+	//lst_sample.push_back(sample5);
+
+	//
+	//vector<Mat> lst_xample, lst_gra_testx;
+	//Mat xample = imread("D:\\Data\\negative\\negative\\im330.jpg");
+	//Mat xample1 = imread("D:\\Data\\negative\\negative\\im346.jpg");
+	//Mat xample2 = imread("D:\\Data\\negative\\negative\\im28675.jpg");
+	//Mat xample3 = imread("D:\\Data\\negative\\negative\\im27867.jpg");
+	//Mat xample4 = imread("D:\\Data\\negative\\negative\\im24992.jpg");
+	//Mat xample5 = imread("D:\\Data\\negative\\negative\\im14992.jpg");
+	//lst_sample.push_back(xample);
+	//lst_sample.push_back(xample1);
+	//lst_sample.push_back(xample2);
+	//lst_sample.push_back(xample3);
+	//lst_sample.push_back(xample4);
+	//lst_sample.push_back(xample5);
+	////// 
+	//computeHOGs(pos_image_size, lst_sample, lst_gra_test, flip_samples);
+	//computeHOGs(pos_image_size, lst_xample, lst_gra_testx, flip_samples);
+	//vector<Mat> vec_pre_posi_sample = Vec_mat_predic(lst_gra_test);
+	//vector<Mat> vec_pre_nega_xample = Vec_mat_predic(lst_gra_testx);
+	/// test vector Mat
+	//2
+	vector<Mat>vec_pre_posi_train = Vec_mat_predic(dt_train_predic_posi_test);
+	vector<Mat>vec_pre_nega_train = Vec_mat_predic(dt_train_predic_nega_test);
+	//end 2
+	//1
+	vector<Mat> vec_pre_posi = Vec_mat_predic(gradien_lst_pre_posi);
+	vector<Mat> vec_pre_nega = Vec_mat_predic(gradien_lst_pre_enga);
+	//end 1
+	////
+	Mat train_data;
+	convert_to_ml(gradient_lst, train_data);
+	vector<int> pre_lable;
+	clog << "Training SVM...";
+	Ptr< SVM > svm = SVM::create();
+	
+	/* Default values to train SVM */
+	svm->setCoef0(0.0);
+	svm->setDegree(3);
+	svm->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER + TermCriteria::EPS, 1000, 1e-3));
+	svm->setGamma(0);
+	svm->setKernel(SVM::LINEAR);
+	svm->setNu(0.5);
+	svm->setP(0.1); // for EPSILON_SVR, epsilon in loss function?
+	svm->setC(0.01); // From paper, soft classifier
+	svm->setType(SVM::EPS_SVR); // C_SVC; // EPSILON_SVR; // may be also NU_SVR; // do regression task
+	svm->train(train_data, ROW_SAMPLE, labels);
+	//2
+	float dt_pre_positive = Calu_predic(vec_pre_posi_train, svm);
+	float dt_pre_negative = Calu_predic(vec_pre_nega_train, svm);
+	//end2
+	//1
+	float pre_positive = Calu_predic(vec_pre_posi, svm);
+	float pre_negative = Calu_predic(vec_pre_nega, svm);
+	//end 1 
+	///
+	//float Float_pre_posi_sample_face = Calu_predic_test(vec_pre_posi_sample, svm,0);
+	//float Float_pre_nega_xample_nonface = Calu_predic_test(vec_pre_nega_xample, svm,1);
+	///
+	//float Prec_end = svm->predict(test_pre);
+	svm->save("my_detector_4h57SVMtest.xml");
+	clog << "...[done]" << endl;
+	HOGDescriptor hog(pos_image_size, Size(24, 24), Size(8, 8), Size(8, 8), 9);
+	//hog.save(obj_det_filename);
+	//hog.winSize = pos_image_size;
+	hog.setSVMDetector(get_svm_detector(svm));
+	hog.save(obj_det_filename);
+	//2
+	cout <<endl<<"datatrain_Predic positive=:\t"<< dt_pre_positive;
+	cout << endl<<"datatrain_Predic neagtive=:\t" << dt_pre_negative;
+	//end 2
+	//1
+	cout <<endl<<"dataTestPredic positive=:\t"<< pre_positive;
+	cout << endl<<"dataTestPredic neagtive=:\t" << pre_negative;
+	//end 1
+	cout << endl << pre_lable.size();
+	cout << endl << "DOne";
+	getchar();
+	//test_trained_detector(obj_det_filename, test_dir, videofilename);
+
+
+////// TEST
+	//String obj_det_filename = "my_detector_4h57.xml"; //my_detector_10h41 my_detector_11h24
+	//cv::Mat img = cv::imread("pic00007.jpg"); //  pic00007.jpg image_0042.jpg image_0001.jpg
+	////cv::Mat img = cv::imread("pic00007.jpg");
+	////resize(img, img, Size(64, 128));
+	//imshow("img", img);
+	//Mat a, b, c;
+	////resize(img, img, Size((int)img.size().width/2, (int)img.size().height /2));
+	///*resize(img, a, Size((int)img.size().width / 2, (int)img.size().height / 2));
+	//resize(img, b, Size((int)img.size().width / 5, (int)img.size().height / 5));*/
+	////Mat gray;
+	////cvtColor(img, gray, COLOR_BGR2GRAY);
+	//HOGDescriptor hog(Size(40, 56), Size(24, 24), Size(8, 8), Size(8, 8), 9);
+	///*Ptr<SVM> svm = SVM::create();
+	//svm = SVM::load("C:\\Users\\MinhHoang\\source\\repos\\Haar_Like\\Test\\my_detector_4h57SVM.xml");*/
+	////svm = Algorithm::load<SVM>("C:\\Users\\MinhHoang\\source\\repos\\Haar_Like\\Test\\my_detector_4h57.xml");
+	//hog.load(obj_det_filename);
+	//vector< Rect > detections;
+	//vector< double > foundWeights;
+	//hog.detectMultiScale(img, detections, foundWeights);
+	//for (size_t j = 0; j < detections.size(); j++)
+	//{
+	//	Scalar color = Scalar(255, 0, 255);
+	//	//Scalar color = Scalar(0, foundWeights[j] * foundWeights[j] * 200, 0);
+	//	rectangle(img, detections[j], color, img.cols / 400 + 1);
+	//	imshow("img", img);
+	//	waitKey(300);
+	//	//if (foundWeights[j] >= 0.85) {
+	//	//	Scalar color = Scalar(0, foundWeights[j] * foundWeights[j] * 200, 0);
+	//	//	rectangle(img, detections[j], color, img.cols / 400 + 1);
+	//	//	//rectangle(img, detections[j], Scalar(0, 255, 0), 1, 8, 0);
+	//	//}
+	//}
+	//imshow(obj_det_filename, img);
+
+	//////////////predict
+	/*string path = "D:\\Data\\faces";
+	PredictSVM(path);
+	waitKey();*/
+	return 0;
+}

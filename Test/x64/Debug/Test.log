@@ -1,0 +1,165 @@
+﻿  Test.cpp
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(202,32): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(216,32): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(386,37): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(386,37): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(386,37): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(386,37): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(386,37): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(413,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(424,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(425,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(426,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,42): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(427,27): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(441,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(442,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(443,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,35): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244: 'argument': conversion from '_Ty' to '_Tp', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:         and
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:             _Tp=int
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(444,23): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(487,75): warning C4305: 'argument': truncation from 'double' to 'const float'
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(539,16): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(540,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(588,16): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(589,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(596,78): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(596,78): warning C4244:         with
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(596,78): warning C4244:         [
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(596,78): warning C4244:             _Ty=float
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(596,78): warning C4244:         ]
+C:\Users\T450s\source\repos\Haar_Like\Test\Test.cpp(868,50): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Test.vcxproj -> C:\Users\T450s\source\repos\Haar_Like\x64\Debug\Test.exe

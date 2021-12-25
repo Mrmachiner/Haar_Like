@@ -1,0 +1,39 @@
+String obj_det_filename = "my_detector_10h41.yml"; //my_detector_10h41 my_detector_11h24
+	cv::Mat img = cv::imread("pic00007.jpg"); //  pic00007.jpg image_0042.jpg image_0001.jpg
+	//cv::Mat img = cv::imread("pic00007.jpg");
+	//resize(img, img, Size(64, 128));
+	imshow("img", img);
+	Mat a, b, c;
+	//resize(img, img, Size((int)img.size().width/2, (int)img.size().height /2));
+	/*resize(img, a, Size((int)img.size().width / 2, (int)img.size().height / 2));
+	resize(img, b, Size((int)img.size().width / 5, (int)img.size().height / 5));*/
+	//Mat gray;
+	//cvtColor(img, gray, COLOR_BGR2GRAY);
+	HOGDescriptor hog(Size(40, 56), Size(24, 24), Size(8, 8), Size(8, 8), 9);
+	/*HOGDescriptor hog;
+	hog.winSize = Size(40, 56);*/
+	svm
+	hog.load(obj_det_filename);
+	vector< Rect > detections;
+	vector< double > foundWeights;
+	//hog.detectMultiScale(img, detections, 1.1, 2, 0, cv::Size(30, 30));
+	//hog.detectMultiScale(img, detections, 0, Size(30, 30), Size(0, 0),1.1,2,false);
+	hog.detectMultiScale(img, detections, 0, Size(8, 8), Size(24, 24), 1.05, 2, false);
+	//hog.detectMultiScale(img, detections, foundWeights);
+	//hog.detectMultiScale
+	for (size_t j = 0; j < detections.size(); j++)
+	{
+		Scalar color = Scalar(255, 0, 255);
+		//Scalar color = Scalar(0, foundWeights[j] * foundWeights[j] * 200, 0);
+		rectangle(img, detections[j], color, img.cols / 400 + 1);
+		//if (foundWeights[j] >= 0.85) {
+		//	Scalar color = Scalar(0, foundWeights[j] * foundWeights[j] * 200, 0);
+		//	rectangle(img, detections[j], color, img.cols / 400 + 1);
+		//	//rectangle(img, detections[j], Scalar(0, 255, 0), 1, 8, 0);
+		//}
+	}
+	
+	imshow(obj_det_filename, img);
+	//imwrite("sizen2.jpg",img);
+	waitKey();
+	return 0;
